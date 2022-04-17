@@ -1,4 +1,6 @@
 package com.group8rhea.monopolyserver.model;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -6,9 +8,10 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "userInfo")
 public class UserModel {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false, unique = true)
@@ -18,21 +21,20 @@ public class UserModel {
     private String password;
 
     @CreatedDate
+    @CreationTimestamp
     @Temporal(TemporalType.DATE)
     @Column(nullable = false, updatable = false)
     private Date createdAt;
 
     @LastModifiedDate
+    @UpdateTimestamp
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
     private Date lastModifiedAt;
 
     public UserModel(){}
-    public UserModel(Integer id, String username, String password, Date createdAt, Date lastModifiedAt){
-        this.id=id;
+    public UserModel(String username, String password){
         this.username = username;
-        this.createdAt=createdAt;
-        this.lastModifiedAt = lastModifiedAt;
         this.password=password;
     }
 
@@ -49,6 +51,18 @@ public class UserModel {
     }
 
     public String getPassword(){return password;}
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public Date getLastModifiedAt() {
+        return lastModifiedAt;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public void setUsername(String username) {
         this.username = username;
