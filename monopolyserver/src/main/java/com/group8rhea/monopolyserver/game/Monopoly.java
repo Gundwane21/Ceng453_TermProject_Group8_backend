@@ -11,10 +11,20 @@ public class Monopoly {
     @Setter
     private List<Player> players;
     private Board board;
+    @Getter
+    @Setter
+    private boolean isGameFinished;
     public Monopoly(List<Player> players, Board board) {
         this.players = players;
         this.board = board;
+        this.isGameFinished = false;
     }
+
+//    public Monopoly(GameMode gameMode) {
+//        if(gameMode.pm == PlayerMode.SINGLEPLAYER) {
+//            players.
+//        }
+//    }
 
     public void startGame() {
     }
