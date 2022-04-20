@@ -1,11 +1,16 @@
 package com.group8rhea.monopolyserver.model;
 
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
 
+@NoArgsConstructor
 @Entity
-@Table(name = "user_model", schema = "project_group8", catalog = "")
+@Table(name = "user_model_copy", schema = "project_group8", catalog = "")
 public class UserModelEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -13,12 +18,14 @@ public class UserModelEntity {
     private int id;
     @Basic
     @Column(name = "created_at")
+    @CreationTimestamp
     private Date createdAt;
     @Basic
     @Column(name = "email")
     private String email;
     @Basic
     @Column(name = "last_modified_at")
+    @UpdateTimestamp
     private Date lastModifiedAt;
     @Basic
     @Column(name = "password")
@@ -26,6 +33,17 @@ public class UserModelEntity {
     @Basic
     @Column(name = "username")
     private String username;
+    @Basic
+    @Column(name = "resettoken")
+    private Integer resettoken;
+
+
+    public UserModelEntity(String username, String password,String email){
+        this.username = username;
+        this.password=password;
+        this.email=email;
+        this.resettoken = 0;
+    }
 
     public int getId() {
         return id;
@@ -74,6 +92,10 @@ public class UserModelEntity {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public Integer getResettoken() {return resettoken;}
+
+    public void setResettoken(Integer resettoken) {this.resettoken = resettoken;}
 
     @Override
     public boolean equals(Object o) {

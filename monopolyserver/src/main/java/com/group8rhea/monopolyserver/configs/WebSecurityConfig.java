@@ -1,6 +1,6 @@
 package com.group8rhea.monopolyserver.configs;
 
-        import com.group8rhea.monopolyserver.service.DatabaseUserDetailsService;
+import com.group8rhea.monopolyserver.service.DatabaseUserDetailsService;
         import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.context.annotation.Bean;
         import org.springframework.context.annotation.Configuration;
@@ -28,6 +28,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/register").permitAll()
+                .antMatchers("/forgotPassword").permitAll()
+                .antMatchers("/resetPassword").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();
