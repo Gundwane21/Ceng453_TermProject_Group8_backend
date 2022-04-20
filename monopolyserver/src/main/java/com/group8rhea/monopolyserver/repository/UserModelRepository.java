@@ -2,7 +2,6 @@ package com.group8rhea.monopolyserver.repository;
 
 import com.group8rhea.monopolyserver.model.UserModelEntity;
 import org.springframework.data.repository.CrudRepository;
-import com.group8rhea.monopolyserver.model.UserModel;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

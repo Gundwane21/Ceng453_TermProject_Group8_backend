@@ -2,7 +2,6 @@ package com.group8rhea.monopolyserver.service;
 
 import com.group8rhea.monopolyserver.dto.SignInDto;
 import com.group8rhea.monopolyserver.dto.SignUpDto;
-import com.group8rhea.monopolyserver.model.UserModel;
 import com.group8rhea.monopolyserver.model.UserModelEntity;
 import com.group8rhea.monopolyserver.repository.UserModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
