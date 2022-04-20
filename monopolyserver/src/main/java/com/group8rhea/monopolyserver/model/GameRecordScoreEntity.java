@@ -9,20 +9,18 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "game_record_score", schema = "project_group8", catalog = "")
+@IdClass(GameScoreEntityPK.class)
 public class GameRecordScoreEntity {
-    @Id
-    @Column(name = "uuid")
-    @Type(type = "uuid-char")
-    private UUID uuid = UUID.randomUUID();
-
     @Basic
     @Column(name = "game_id")
+    @Id
     private long gameId;
     @Basic
     @Column(name = "created_at")
     private Date createdAt;
     @Basic
     @Column(name = "user_id")
+    @Id
     private int userId;
     @Basic
     @Column(name = "score")
