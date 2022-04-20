@@ -1,10 +1,9 @@
 package com.group8rhea.monopolyserver.service;
 
-import com.group8rhea.monopolyserver.dto.MailDto;
-import com.group8rhea.monopolyserver.dto.ResetPasswordDto;
-import com.group8rhea.monopolyserver.dto.SignInDto;
-import com.group8rhea.monopolyserver.dto.SignUpDto;
-import com.group8rhea.monopolyserver.model.UserModel;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.group8rhea.monopolyserver.dto.*;
 import com.group8rhea.monopolyserver.model.UserModelEntity;
 import com.group8rhea.monopolyserver.repository.UserModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.Serializable;
-import java.util.Optional;
-import java.util.Random;
+import java.net.http.HttpResponse;
+import java.util.*;
 
 @Service
 public class RegisterLoginServices implements Serializable {
@@ -29,32 +28,46 @@ public class RegisterLoginServices implements Serializable {
     @Autowired
     MailServerService mailServerService ;
 
-    /* TODO: Add verification of email password etc. regex*/
-    public HttpStatus registerUser(SignUpDto userDto){
+
+    public HttpResponseDto registerUser(SignUpDto userDto){
+        HttpResponseDto httpResponseDto = new HttpResponseDto();
+        httpResponseDto.setUsername(userDto.getUsername());
+
         UserModelEntity userModel = new UserModelEntity(userDto.getUsername(),
                 passwordEncoder.encode(userDto.getPassword()),
                 userDto.getEmail());
         if (userModelRepository.findByUsername(userModel.getUsername()).isEmpty()) {
             userModelRepository.save(userModel);
-            System.out.println("Succesfull add to repository");
-            return HttpStatus.OK;
+            httpResponseDto.setHttpStatus(HttpStatus.OK);
+            httpResponseDto.setMessage("Succesfull add");
         }
         else{
-            System.out.println("This user already exists");
-            return HttpStatus.OK;
+            httpResponseDto.setHttpStatus(HttpStatus.CONFLICT);
+            httpResponseDto.setMessage("Already exists");
         }
+        return httpResponseDto;
     }
 
-    public HttpStatus loginUser(SignInDto userDto){
+    public HttpResponseDto loginUser(SignInDto userDto){
+        HttpResponseDto httpResponseDto = new HttpResponseDto();
+        httpResponseDto.setUsername(userDto.getUsername());
+
         Optional<UserModelEntity> userModel1 = userModelRepository.findByUsername(userDto.getUsername());
         if ( userModel1.isPresent() ){
-            return HttpStatus.OK;
+            httpResponseDto.setHttpStatus(HttpStatus.OK);
+            httpResponseDto.setMessage("Login Success");
+
         }
         else{
-            return HttpStatus.NOT_ACCEPTABLE;
+            httpResponseDto.setHttpStatus(HttpStatus.UNAUTHORIZED);
+            httpResponseDto.setMessage("");
         }
+        return httpResponseDto;
     }
-    public HttpStatus forgotPassword(String email){
+    public HttpResponseDto forgotPassword(String email){
+        HttpResponseDto httpResponseDto = new HttpResponseDto();
+        httpResponseDto.setUsername(email);
+
         Optional<UserModelEntity> userModel = userModelRepository.findByEmail(email);
         if ( userModel.isPresent()){
 
@@ -63,24 +76,34 @@ public class RegisterLoginServices implements Serializable {
 
             userModel.get().setResettoken(resetPassword);
             userModelRepository.save(userModel.get());
-
             mailServerService.sendResetLinkMail(email,resetPassword);
-            return HttpStatus.OK;
+
+            httpResponseDto.setHttpStatus(HttpStatus.OK);
+            httpResponseDto.setMessage("Reset link is sent");
         }
         else{
-            return HttpStatus.BAD_REQUEST;
+            httpResponseDto.setHttpStatus(HttpStatus.NOT_FOUND);
+            httpResponseDto.setMessage("email does not exists");
         }
+        return httpResponseDto;
     }
 
-    public HttpStatus resetPassword(ResetPasswordDto resetPasswordDto){
+    public HttpResponseDto resetPassword(ResetPasswordDto resetPasswordDto){
+        HttpResponseDto httpResponseDto = new HttpResponseDto();
+        httpResponseDto.setUsername("");
+
         Optional<UserModelEntity> userModel = userModelRepository.findByResettoken(resetPasswordDto.getResettoken());
         if ( userModel.isPresent() ){
             UserModelEntity userModelEntity = userModel.get();
             userModelEntity.setPassword(passwordEncoder.encode(resetPasswordDto.getNewPassword()));
-            return HttpStatus.OK;
+            httpResponseDto.setHttpStatus(HttpStatus.OK);
+            httpResponseDto.setMessage("Password reset");
         }
-        return HttpStatus.BAD_REQUEST;
-//        return HttpStatus.OK;
+        else{
+            httpResponseDto.setHttpStatus(HttpStatus.CONFLICT);
+            httpResponseDto.setMessage("Failed reset");
+        }
+        return httpResponseDto;
     }
 
     private int generateRandomNum(int rangeFrom, int rangeTo ){
