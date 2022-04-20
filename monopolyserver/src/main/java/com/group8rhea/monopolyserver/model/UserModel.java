@@ -1,4 +1,6 @@
 package com.group8rhea.monopolyserver.model;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,16 +10,21 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "userInfo")
+//@Getter
+//@Setter
+    @Table(name = "userInfo",uniqueConstraints = {@UniqueConstraint(columnNames = {"username","email"})})
 public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "username",nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false)
+    @Column(name = "email",nullable = false, unique = true)
+    private String email;
+
+    @Column(name = "password", nullable = false)
     private String password;
 
     @CreatedDate
@@ -33,9 +40,10 @@ public class UserModel {
     private Date lastModifiedAt;
 
     public UserModel(){}
-    public UserModel(String username, String password){
+    public UserModel(String username, String password,String email){
         this.username = username;
         this.password=password;
+        this.email=email;
     }
 
     public Integer getId() {
@@ -66,5 +74,13 @@ public class UserModel {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

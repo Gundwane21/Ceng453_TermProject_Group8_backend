@@ -1,21 +1,18 @@
 package com.group8rhea.monopolyserver.controller;
 
-import com.group8rhea.monopolyserver.MonopolyServerApplication;
-import com.group8rhea.monopolyserver.dto.UserDto;
-import com.group8rhea.monopolyserver.model.UserModel;
+import com.group8rhea.monopolyserver.dto.SignInDto;
+import com.group8rhea.monopolyserver.dto.SignUpDto;
 import com.group8rhea.monopolyserver.service.DatabaseUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import com.group8rhea.monopolyserver.repository.UserModelRepository;
-
+import java.net.http.HttpResponse;
 
 @RestController
-@RequestMapping(value = "/api")
+//@RequestMapping(value = "/api")
 class RegistrationController {
 
     private DatabaseUserDetailsService databaseUserDetailsService;
@@ -24,16 +21,27 @@ class RegistrationController {
         this.databaseUserDetailsService = databaseUserDetailsService;
     }
 
-    @PostMapping(value = "register",consumes = "application/json", produces =
-            "application/json")
-//    @ResponseStatus(code = HttpStatus.CREATED)
-    @ResponseBody
-    public String register(@RequestBody UserDto userDto){
-        databaseUserDetailsService.registerUser(userDto);
-        System.out.println("SUCCESSFULLL REGISTER, " + " username: "
-        + userDto.getUsername() + " password: " + userDto.getPassword()     );
-        return "Succesful post request";
+    @PostMapping(value = "register")
+    public HttpStatus register(@RequestBody SignUpDto userDto){
+        HttpStatus httpStatus = databaseUserDetailsService.registerUser(userDto);
+        return httpStatus;
     }
+
+    @PostMapping(value = "login")
+    public HttpStatus login(Authentication authRequest){
+        if (authRequest !=null){
+
+            User authRequestUser = (User) authRequest.getPrincipal();
+            SignInDto signInDto = new SignInDto(authRequestUser.getUsername(),authRequestUser.getPassword());
+
+            HttpStatus httpStatus =  databaseUserDetailsService.loginUser( signInDto);
+            return httpStatus;
+        }
+        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
+        return httpStatus;
+    }
+
+
 
 
 
