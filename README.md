@@ -11,4 +11,4 @@ username: swagger
 password: swagger
 
 Database Diagram:
-![Database Diagram](./diagrams/database_schema.png)
+![Database Diagram](./docs/diagrams/database_schema.png)
