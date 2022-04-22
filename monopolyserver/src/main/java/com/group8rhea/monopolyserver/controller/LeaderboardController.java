@@ -8,11 +8,9 @@ import com.group8rhea.monopolyserver.service.LeaderboardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -52,7 +50,7 @@ public class LeaderboardController {
         }
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        List<Map<String, Integer>> leaderboard = leaderboardService.getLeaderboard(timeInterval);
+        List<Map<String, Long>> leaderboard = leaderboardService.getLeaderboard(timeInterval);
         String json = null;
         try {
             json = mapper.writeValueAsString(leaderboard);
