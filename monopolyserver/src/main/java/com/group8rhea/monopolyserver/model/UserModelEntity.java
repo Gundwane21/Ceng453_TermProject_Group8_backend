@@ -7,11 +7,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
-/*
+/**
 * Entity for User Table in database
 * Has id, username, password, resettoken,created at and last modified at columns
 * */
-@NoArgsConstructor
 @Entity
 @Table(name = "user_model", schema = "project_group8", catalog = "")
 public class UserModelEntity {

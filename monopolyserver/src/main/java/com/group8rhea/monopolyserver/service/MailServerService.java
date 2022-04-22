@@ -11,7 +11,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 
-/*
+/**
 * Defines the MailServerService which is used by RegisterLoginServices
 *
 * */
@@ -20,9 +20,9 @@ public class MailServerService implements IMailService{
 
     @Autowired
     JavaMailSender mailSender;
-    /*
-    * @param String mailto
-    * @param int resetPassword
+    /**
+    * @param mailto - mail address to send the email
+    * @param resettoken - 6 digit token
     * Sends an email from our gmail accounts to the parameter mail
     * mail contains the password resettoken which is 6 digit
     * */
@@ -37,8 +37,8 @@ public class MailServerService implements IMailService{
         sendEmail(mail);
 
     }
-    /*
-    * @param MailDto mail
+    /**
+    * @param mail
     * {
     *  String subject;
     *  String from;

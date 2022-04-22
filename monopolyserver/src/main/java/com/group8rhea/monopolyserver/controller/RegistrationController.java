@@ -15,11 +15,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller for RESTful apis for register login password reset
+ */
 
 @RestController
 @RequestMapping(value = "/api")
 @Tag(name="Register and Login API", description = "Controlls the register, login and password reset activities")
-class RegistrationController {
+public class RegistrationController {
 
     private DatabaseUserDetailsService databaseUserDetailsService;
     private RegisterLoginServices registerLoginServices;
@@ -65,10 +68,5 @@ class RegistrationController {
     @ApiResponse(responseCode = "404", description = "Returns the resettoken is wrong response ", content = @Content(mediaType = "application/json"))
     public HttpResponseDto resetPassword(@RequestBody ResetPasswordDto resetPasswordDto){
         return registerLoginServices.resetPassword(resetPasswordDto);
-    }
-
-    @GetMapping("home")
-    public String home(){
-        return "Welcome home";
     }
 }

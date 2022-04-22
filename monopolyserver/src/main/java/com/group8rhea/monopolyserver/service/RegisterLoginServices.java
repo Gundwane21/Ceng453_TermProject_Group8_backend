@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.net.http.HttpResponse;
 import java.util.*;
 
-/*Service that is used by RegistrationController to reach the database
+/**Service that is used by RegistrationController to reach the database
 * on a service level. Provides register login forgetPassword and update password services
 * to the corresponding controllers
 * */
@@ -34,8 +34,8 @@ public class RegisterLoginServices implements Serializable {
     @Autowired
     MailServerService mailServerService ;
 
-    /*
-     * @param SignUpDto
+    /**
+     * @param signUpDto
      * SignUpDto contains :
      * {
      *  String username;
@@ -43,17 +43,17 @@ public class RegisterLoginServices implements Serializable {
      *  String email;
      *  }
      * example: {"username12", "pass12", "user@gmail.com"}
-     *
+     * @return HttpResponseDto - Has 3 fields: HTTP Status code, username, response message
      * if the given username exists in the database it returns HTTP.Conflict and user "Already exists response
      * else it saves the user in the database and returns HTTP 201 Created and Succesfull add response
      * */
-    public HttpResponseDto registerUser(SignUpDto userDto){
+    public HttpResponseDto registerUser(SignUpDto signUpDto){
         HttpResponseDto httpResponseDto = new HttpResponseDto();
-        httpResponseDto.setUsername(userDto.getUsername());
+        httpResponseDto.setUsername(signUpDto.getUsername());
 
-        UserModelEntity userModel = new UserModelEntity(userDto.getUsername(),
-                passwordEncoder.encode(userDto.getPassword()),
-                userDto.getEmail());
+        UserModelEntity userModel = new UserModelEntity(signUpDto.getUsername(),
+                passwordEncoder.encode(signUpDto.getPassword()),
+                signUpDto.getEmail());
         if (userModelRepository.findByUsername(userModel.getUsername()).isEmpty()) {
             userModelRepository.save(userModel);
             httpResponseDto.setHttpStatus(HttpStatus.OK);
@@ -65,25 +65,25 @@ public class RegisterLoginServices implements Serializable {
         }
         return httpResponseDto;
     }
-    /*
-     * @param SignInDto
+    /**
+     * @param signInDto
      * SignInDto contains :
      * {
      *  String username;
      *  String password;
      *  }
      * example: {"username12", "pass12"}
-     *
+     * @return HttpResponseDto - Has 3 fields: HTTP Status code, username, response message
      * Spring Security daoAuthentification Provider checks the credentials of user but additional check is made by
      * this service.
      * if the given username exists in the database it returns HTTP 200 Login Success response
      * else returns HTTP 401  response Username and/or Password is incorrect
      * */
-    public HttpResponseDto loginUser(SignInDto userDto){
+    public HttpResponseDto loginUser(SignInDto signInDto){
         HttpResponseDto httpResponseDto = new HttpResponseDto();
-        httpResponseDto.setUsername(userDto.getUsername());
+        httpResponseDto.setUsername(signInDto.getUsername());
 
-        Optional<UserModelEntity> userModel1 = userModelRepository.findByUsername(userDto.getUsername());
+        Optional<UserModelEntity> userModel1 = userModelRepository.findByUsername(signInDto.getUsername());
         if ( userModel1.isPresent() ){
             httpResponseDto.setHttpStatus(HttpStatus.OK);
             httpResponseDto.setMessage("Login Success");
@@ -96,8 +96,9 @@ public class RegisterLoginServices implements Serializable {
         return httpResponseDto;
     }
 
-    /*
-     * @param String email
+    /**
+     * @param email - users email to send forgot password link
+     * @return HttpResponseDto - Has 3 fields: HTTP Status code, username, response message
      *
      * if the given email exists in the database it generates a 6 digit random token
      * and sends an e mail to containing this resettoken
@@ -126,15 +127,15 @@ public class RegisterLoginServices implements Serializable {
         }
         return httpResponseDto;
     }
-    /*
+    /**
     * @param resetPasswordDto
-    * SignUpDto contains :
     * {
     *  Integer resettoken;
     *  String newPassword;
     *  }
     * example: {"128349", "passneww"}
-    * If the the token is same as the database updates the new password with same
+     * @return HttpResponseDto - Has 3 fields: HTTP Status code, username, response message resetPasswordDto contains :
+     * If the the token is same as the database updates the new password with same
     * encypter and returns Http 200 Password reset response
     * Else returns Http 404 Failed reset password, token is incorrect response
     * */
@@ -156,8 +157,9 @@ public class RegisterLoginServices implements Serializable {
         return httpResponseDto;
     }
 
-    /*
-    * @param rangeFrom , rangeTo
+    /**
+    * @param rangeFrom
+     *  @param rangeTo
     * @return randam integer
     * generates a random integer given range
     * */

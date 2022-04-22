@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.Map;
 
 import static org.mockito.Mockito.when;
-
+/**
+ * Tester for Leaderboard Abilities of the API
+ */
 @SpringBootTest
 public class LeaderboardServiceTest {
 

@@ -7,20 +7,30 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-// This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
-// CRUD refers Create, Read, Update, Delete
-/*
+
+/**
 * This repository is used to reach the User table using JPA and hibernate
 * UserModelEntity is used.
-* Has the following additional APIS
-*   Optional<UserModelEntity> findByUsername(String username);
-*   Optional<UserModelEntity> findByEmail(String email);
-*   Optional<UserModelEntity> findByResettoken(Integer resettoken);
 * */
 
 @Repository
 public interface UserModelRepository extends CrudRepository<UserModelEntity, Integer> {
+    /**
+     *
+     * @param username - username of the user
+     * @return Optional - -Optional of UserModelEntity
+     */
     Optional<UserModelEntity> findByUsername(String username);
+    /**
+     *
+     * @param email - email of the user
+     * @return Optional - Optional of UserModelEntity
+     */
     Optional<UserModelEntity> findByEmail(String email);
+    /**
+     *
+     * @param resettoken - resettoken of the user
+     * @return Optional - Optional of UserModelEntity
+     */
     Optional<UserModelEntity> findByResettoken(Integer resettoken);
 }

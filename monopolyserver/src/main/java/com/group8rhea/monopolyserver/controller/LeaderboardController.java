@@ -17,6 +17,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Defines the Leaderboard Rest Api
+ */
 @Tag(name="Leaderboard API", description = "Retrieves Leaderboard")
 @RestController
 public class LeaderboardController {

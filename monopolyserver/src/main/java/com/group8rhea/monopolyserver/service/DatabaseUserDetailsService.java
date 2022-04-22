@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-/*
+/**
 * Service that is needed for Spring security Http basic authentification
 * overrides the default loadByUsername method of Spring Securitys
 * UserDetailsService interface
@@ -30,8 +30,8 @@ public class DatabaseUserDetailsService  implements UserDetailsService {
     private UserModelRepository userModelRepository;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    /*
-    * @param String Username
+    /**
+    * @param  username
     * this method is used by DaoAuthentification provider to check the user is allowed
     * It checks whether the user in our User table in our dataset
     * throws exception if not found

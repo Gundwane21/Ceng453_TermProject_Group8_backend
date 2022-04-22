@@ -20,6 +20,9 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
+/**
+ * Tester for Registration Abilities of the API
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class RegisterLoginServicesTest {
@@ -30,7 +33,7 @@ public class RegisterLoginServicesTest {
     @Autowired
     RegisterLoginServices registerLoginServices  ;
 
-    /*
+    /**
     * Test the register service if the user isnt registered before
     * */
     @Test
@@ -43,7 +46,7 @@ public class RegisterLoginServicesTest {
         Assert.assertEquals("Succesfull add",httpResponseDto.getMessage());
     }
 
-    /*
+    /**
      * Test the register service if the user is already registered before
      * */
     @Test
@@ -61,7 +64,7 @@ public class RegisterLoginServicesTest {
         Assert.assertEquals("Already exists",httpResponseDto.getMessage());
     }
 
-    /*
+    /**
      * Test the login service if the user has correct credentials
      * */
 
@@ -78,7 +81,7 @@ public class RegisterLoginServicesTest {
         Assert.assertEquals("Login Success",httpResponseDto.getMessage());
     }
 
-    /*
+    /**
      * Test the login service if the user does not have correct credentials
      * */
 
@@ -93,7 +96,7 @@ public class RegisterLoginServicesTest {
         Assert.assertEquals("Username and/or Password is incorrect",httpResponseDto.getMessage());
     }
 
-    /*
+    /**
      * Test the forgetPassword service if the users email is in the database
      * */
     @Test
@@ -110,7 +113,7 @@ public class RegisterLoginServicesTest {
         Assert.assertEquals("Reset link is sent",httpResponseDto.getMessage());
     }
 
-    /*
+    /**
      * Test the forgetPassword service if the users email is not in the database
      * */
 

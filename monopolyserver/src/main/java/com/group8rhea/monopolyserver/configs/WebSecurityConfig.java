@@ -13,6 +13,9 @@ import com.group8rhea.monopolyserver.service.DatabaseUserDetailsService;
         import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
         import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * Configures the Security acces of the whole application
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -20,7 +23,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DatabaseUserDetailsService databaseUserDetailsService;
 
-    /*
+    /**
     * Defines /register /login /forgotPassword  /resetPassword  post request endpoints to be
     * not require authentification. All other requests require authentification
     * */
@@ -47,7 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic();
 
     }
-    /*
+    /**
+     * @return AuthenticationProvider
     * Sets up the daoAuthentification provider to work with our UserDetails implementation
     * using same encyripter as the register for passwords
     * This is a key part of Http basic auth
@@ -60,7 +64,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return provider;
     }
 
-    /*
+    /**
+     * @return PasswordEncoder
     * Sets up the encoder to be used in encyripting the password*/
     @Bean
     public PasswordEncoder passwordEncoder() {
