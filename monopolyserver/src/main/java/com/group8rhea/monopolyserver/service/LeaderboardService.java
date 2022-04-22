@@ -1,5 +1,6 @@
 package com.group8rhea.monopolyserver.service;
 
+import com.group8rhea.monopolyserver.model.TimeInterval;
 import com.group8rhea.monopolyserver.repository.GameRecordStoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,4 +30,16 @@ public class LeaderboardService {
         return gameRecordStoreRepository.getLeaderboardBetweenDates(Date.valueOf(today.minusMonths(1)), Date.valueOf(today));
     }
 
+    public List<Map<String, Integer>> getLeaderboard(TimeInterval timeInterval) {
+        switch (timeInterval) {
+            case ALL_TIMES:
+                return getLeaderboardOfAllTimes();
+            case LAST_MONTH:
+                return getLeaderboardOfLastMonth();
+            case LAST_WEEK:
+                return getLeaderboardOfLastWeek();
+            default:
+                return null;
+        }
+    }
 }
