@@ -9,3 +9,6 @@ https://ceng453-term-project-group8.herokuapp.com/swagger-ui/index.html
 Our backend requires http basic authentification even for swagger. For development purposes a default username and password is set
 username: swagger
 password: swagger
+
+Database Diagram:
+![Database Diagram](./diagrams/database_schema.png)
