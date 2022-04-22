@@ -7,10 +7,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
-
+/*
+* Entity for User Table in database
+* Has id, username, password, resettoken,created at and last modified at columns
+* */
 @NoArgsConstructor
 @Entity
-@Table(name = "user_model_copy", schema = "project_group8", catalog = "")
+@Table(name = "user_model", schema = "project_group8", catalog = "")
 public class UserModelEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -37,6 +40,9 @@ public class UserModelEntity {
     @Column(name = "resettoken")
     private Integer resettoken;
 
+    public UserModelEntity(){
+
+    }
 
     public UserModelEntity(String username, String password,String email){
         this.username = username;

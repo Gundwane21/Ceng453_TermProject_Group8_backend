@@ -1,13 +1,11 @@
 package com.group8rhea.monopolyserver.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.group8rhea.monopolyserver.dto.*;
 import com.group8rhea.monopolyserver.model.UserModelEntity;
 import com.group8rhea.monopolyserver.repository.UserModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +15,10 @@ import java.io.Serializable;
 import java.net.http.HttpResponse;
 import java.util.*;
 
+/*Service that is used by RegistrationController to reach the database
+* on a service level. Provides register login forgetPassword and update password services
+* to the corresponding controllers
+* */
 @Service
 public class RegisterLoginServices implements Serializable {
 
@@ -25,10 +27,26 @@ public class RegisterLoginServices implements Serializable {
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final Random random = new Random();
 
+    RegisterLoginServices(UserModelRepository userModelRepository){
+        this.userModelRepository = userModelRepository;
+    }
+
     @Autowired
     MailServerService mailServerService ;
 
-
+    /*
+     * @param SignUpDto
+     * SignUpDto contains :
+     * {
+     *  String username;
+     *  String password;
+     *  String email;
+     *  }
+     * example: {"username12", "pass12", "user@gmail.com"}
+     *
+     * if the given username exists in the database it returns HTTP.Conflict and user "Already exists response
+     * else it saves the user in the database and returns HTTP 201 Created and Succesfull add response
+     * */
     public HttpResponseDto registerUser(SignUpDto userDto){
         HttpResponseDto httpResponseDto = new HttpResponseDto();
         httpResponseDto.setUsername(userDto.getUsername());
@@ -47,7 +65,20 @@ public class RegisterLoginServices implements Serializable {
         }
         return httpResponseDto;
     }
-
+    /*
+     * @param SignInDto
+     * SignInDto contains :
+     * {
+     *  String username;
+     *  String password;
+     *  }
+     * example: {"username12", "pass12"}
+     *
+     * Spring Security daoAuthentification Provider checks the credentials of user but additional check is made by
+     * this service.
+     * if the given username exists in the database it returns HTTP 200 Login Success response
+     * else returns HTTP 401  response Username and/or Password is incorrect
+     * */
     public HttpResponseDto loginUser(SignInDto userDto){
         HttpResponseDto httpResponseDto = new HttpResponseDto();
         httpResponseDto.setUsername(userDto.getUsername());
@@ -60,10 +91,19 @@ public class RegisterLoginServices implements Serializable {
         }
         else{
             httpResponseDto.setHttpStatus(HttpStatus.UNAUTHORIZED);
-            httpResponseDto.setMessage("");
+            httpResponseDto.setMessage("Username and/or Password is incorrect");
         }
         return httpResponseDto;
     }
+
+    /*
+     * @param String email
+     *
+     * if the given email exists in the database it generates a 6 digit random token
+     * and sends an e mail to containing this resettoken
+     * returns HTTP 200 Reset link is sent response
+     * else returns HTTP 404 Email does not exists response
+     * */
     public HttpResponseDto forgotPassword(String email){
         HttpResponseDto httpResponseDto = new HttpResponseDto();
         httpResponseDto.setUsername(email);
@@ -72,7 +112,6 @@ public class RegisterLoginServices implements Serializable {
         if ( userModel.isPresent()){
 
             int resetPassword =generateRandomNum(100000,999999);
-            System.out.println("rest pass: "+ resetPassword);
 
             userModel.get().setResettoken(resetPassword);
             userModelRepository.save(userModel.get());
@@ -83,11 +122,22 @@ public class RegisterLoginServices implements Serializable {
         }
         else{
             httpResponseDto.setHttpStatus(HttpStatus.NOT_FOUND);
-            httpResponseDto.setMessage("email does not exists");
+            httpResponseDto.setMessage("Email does not exists");
         }
         return httpResponseDto;
     }
-
+    /*
+    * @param resetPasswordDto
+    * SignUpDto contains :
+    * {
+    *  Integer resettoken;
+    *  String newPassword;
+    *  }
+    * example: {"128349", "passneww"}
+    * If the the token is same as the database updates the new password with same
+    * encypter and returns Http 200 Password reset response
+    * Else returns Http 404 Failed reset password, token is incorrect response
+    * */
     public HttpResponseDto resetPassword(ResetPasswordDto resetPasswordDto){
         HttpResponseDto httpResponseDto = new HttpResponseDto();
         httpResponseDto.setUsername("");
@@ -100,12 +150,17 @@ public class RegisterLoginServices implements Serializable {
             httpResponseDto.setMessage("Password reset");
         }
         else{
-            httpResponseDto.setHttpStatus(HttpStatus.CONFLICT);
-            httpResponseDto.setMessage("Failed reset");
+            httpResponseDto.setHttpStatus(HttpStatus.NOT_FOUND);
+            httpResponseDto.setMessage("Failed reset password, token is incorrect");
         }
         return httpResponseDto;
     }
 
+    /*
+    * @param rangeFrom , rangeTo
+    * @return randam integer
+    * generates a random integer given range
+    * */
     private int generateRandomNum(int rangeFrom, int rangeTo ){
         return random.nextInt(rangeTo - rangeFrom +1 ) + rangeFrom ;
     }

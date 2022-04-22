@@ -9,6 +9,10 @@ import org.springframework.core.env.Environment;
 
 import java.util.Properties;
 
+/*
+* Configuration for MailServerService
+* It takes the necessary properties from the environment and sets them up.
+* */
 @Configurable
 public class MailConfig {
     @Autowired

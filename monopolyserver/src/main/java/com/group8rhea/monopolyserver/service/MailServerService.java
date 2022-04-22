@@ -11,24 +11,42 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 
+/*
+* Defines the MailServerService which is used by RegisterLoginServices
+*
+* */
 @Service
 public class MailServerService implements IMailService{
 
     @Autowired
     JavaMailSender mailSender;
-
-    public void sendResetLinkMail(String mailto, int resetPassword){
+    /*
+    * @param String mailto
+    * @param int resetPassword
+    * Sends an email from our gmail accounts to the parameter mail
+    * mail contains the password resettoken which is 6 digit
+    * */
+    public void sendResetLinkMail(String mailto, int resettoken){
 
         MailDto mail = new MailDto();
         mail.setFrom("teamrheamonopoly@gmail.com");
         mail.setTo(mailto);
         mail.setSubject("Monopoly Rhea - Forgot Password Link");
-        mail.setContent("Here is the reset password: " + String.valueOf(resetPassword) );
+        mail.setContent("Here is the reset password: " + String.valueOf(resettoken) );
 
         sendEmail(mail);
 
     }
-
+    /*
+    * @param MailDto mail
+    * {
+    *  String subject;
+    *  String from;
+    *  String to;
+    *  String content;
+    * }
+    * sets up the email using mail dto then sends the email
+    * */
     @Override
     public void sendEmail(MailDto mail) {
         MimeMessage mimeMessage= mailSender.createMimeMessage();

@@ -20,16 +20,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DatabaseUserDetailsService databaseUserDetailsService;
 
+    /*
+    * Defines /register /login /forgotPassword  /resetPassword  post request endpoints to be
+    * not require authentification. All other requests require authentification
+    * */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .csrf()
-                .disable()
                 .authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/register").permitAll()
-                .antMatchers("/forgotPassword").permitAll()
-                .antMatchers("/resetPassword").permitAll()
                 .antMatchers("/v2/api-docs",
                 "/configuration/ui",
                 "/swagger-resources/**",
@@ -37,26 +35,56 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/swagger-ui/**",
                 "/swagger-ui",
                 "/webjars/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .antMatchers("home").permitAll()
                 .and()
                 .httpBasic()
                 .and()
-                .formLogin().disable()
-                .logout().disable();
+                .csrf().disable();
+//        httpSecurity
+//                .authorizeRequests()
+//                .anyRequest().authenticated()
+//                .and()
+//                .httpBasic().disable()
+//                .formLogin().disable();
+//                .csrf()
+//                .disable()
+//                .authorizeRequests()
+//                .antMatchers("/login").permitAll()
+//                .antMatchers("/register").permitAll()
+//                .antMatchers("/forgotPassword").permitAll()
+//                .antMatchers("/resetPassword").permitAll()
+//                .antMatchers("/v2/api-docs",
+//                "/configuration/ui",
+//                "/swagger-resources/**",
+//                "/configuration/security",
+//                "/swagger-ui/**",
+//                "/swagger-ui",
+//                "/webjars/**").permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .httpBasic()
+//                .and()
+//                .formLogin().disable()
+//                .logout().disable();
 
     }
-
+    /*
+    * Sets up the daoAuthentification provider to work with our UserDetails implementation
+    * using same encyripter as the register for passwords
+    * This is a key part of Http basic auth
+    * */
     @Bean
     public AuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
         provider.setUserDetailsService(this.databaseUserDetailsService);
-        System.out.println(provider.toString());
         return provider;
     }
 
+    /*
+    * Sets up the encoder to be used in encyripting the password*/
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
