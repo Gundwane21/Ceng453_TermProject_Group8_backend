@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-//@RequestMapping(value = "/api")
+@RequestMapping(value = "/api")
 @Tag(name="Register and Login API", description = "Controlls the register, login and password reset activities")
 class RegistrationController {
 

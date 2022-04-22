@@ -27,7 +27,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                .csrf()
+                .disable()
                 .authorizeRequests()
+                .antMatchers("/api/login",
+                        "/api/register",
+                        "/api/forgotPassword",
+                        "/api/resetPassword"
+                        ).permitAll()
                 .antMatchers("/v2/api-docs",
                 "/configuration/ui",
                 "/swagger-resources/**",
@@ -35,39 +42,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/swagger-ui/**",
                 "/swagger-ui",
                 "/webjars/**").permitAll()
-                .antMatchers("home").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .httpBasic()
-                .and()
-                .csrf().disable();
-//        httpSecurity
-//                .authorizeRequests()
-//                .anyRequest().authenticated()
-//                .and()
-//                .httpBasic().disable()
-//                .formLogin().disable();
-//                .csrf()
-//                .disable()
-//                .authorizeRequests()
-//                .antMatchers("/login").permitAll()
-//                .antMatchers("/register").permitAll()
-//                .antMatchers("/forgotPassword").permitAll()
-//                .antMatchers("/resetPassword").permitAll()
-//                .antMatchers("/v2/api-docs",
-//                "/configuration/ui",
-//                "/swagger-resources/**",
-//                "/configuration/security",
-//                "/swagger-ui/**",
-//                "/swagger-ui",
-//                "/webjars/**").permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .httpBasic()
-//                .and()
-//                .formLogin().disable()
-//                .logout().disable();
+                .httpBasic();
 
     }
     /*
