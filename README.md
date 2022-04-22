@@ -1,7 +1,7 @@
 # Ceng453_TermProject_Group8_backend
 Ceng453 Monopoly game backend
 
-Documentation can be found at monopolyserver/javadoc folder as javadoc
+Documentation can be found at docs/javadoc folder as javadoc
 
 Swagger api documentation can be found at
 https://ceng453-term-project-group8.herokuapp.com/swagger-ui/index.html
