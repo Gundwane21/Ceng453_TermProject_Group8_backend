@@ -1,0 +1,8 @@
+com.group8rhea.monopolyserver
+com.group8rhea.monopolyserver.configs
+com.group8rhea.monopolyserver.controller
+com.group8rhea.monopolyserver.dto
+com.group8rhea.monopolyserver.game
+com.group8rhea.monopolyserver.model
+com.group8rhea.monopolyserver.repository
+com.group8rhea.monopolyserver.service
