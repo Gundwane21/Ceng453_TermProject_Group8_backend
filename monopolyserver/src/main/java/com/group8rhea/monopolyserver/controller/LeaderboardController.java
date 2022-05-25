@@ -54,12 +54,15 @@ public class LeaderboardController {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         List<Map<String, Long>> leaderboard = leaderboardService.getLeaderboard(timeInterval);
+        StringBuilder sb = new StringBuilder();
         String json = null;
+        sb.append("{\"result\": ");
         try {
             json = mapper.writeValueAsString(leaderboard);
+            sb.append(json).append("}");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return json;
+        return sb.toString();
     }
 }
