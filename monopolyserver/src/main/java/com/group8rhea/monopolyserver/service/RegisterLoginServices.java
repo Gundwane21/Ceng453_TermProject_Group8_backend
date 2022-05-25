@@ -143,10 +143,13 @@ public class RegisterLoginServices implements Serializable {
         HttpResponseDto httpResponseDto = new HttpResponseDto();
         httpResponseDto.setUsername("");
 
+        System.out.println(resetPasswordDto.getNewPassword());
+        System.out.println(resetPasswordDto.getResettoken());
         Optional<UserModelEntity> userModel = userModelRepository.findByResettoken(resetPasswordDto.getResettoken());
         if ( userModel.isPresent() ){
             UserModelEntity userModelEntity = userModel.get();
             userModelEntity.setPassword(passwordEncoder.encode(resetPasswordDto.getNewPassword()));
+            userModelRepository.save(userModelEntity);
             httpResponseDto.setHttpStatus(HttpStatus.OK);
             httpResponseDto.setMessage("Password reset");
         }
