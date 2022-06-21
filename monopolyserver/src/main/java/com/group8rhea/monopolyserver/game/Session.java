@@ -1,12 +1,9 @@
 package com.group8rhea.monopolyserver.game;
 
-import lombok.Getter;
-
 import java.util.Map;
 import java.util.Queue;
 
 public class Session {
-    @Getter
     private Integer sessionID;
 
     private int capacity;
@@ -28,4 +25,7 @@ public class Session {
         return false;
     };
 
+    public Integer getSessionID() {
+        return sessionID;
+    }
 }
