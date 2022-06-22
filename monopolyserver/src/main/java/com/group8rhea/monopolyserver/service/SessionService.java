@@ -1,8 +1,16 @@
 package com.group8rhea.monopolyserver.service;
 
-import com.group8rhea.monopolyserver.game.Session;
+import com.group8rhea.sessionlibrary.Session;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.*;
 
 @Service
@@ -11,7 +19,7 @@ public class SessionService {
     private static final int SESSION_SIZE = 4;
     private int sessionIDCounter;
 
-    private Map<Integer,Session> activeSessionMap;
+    private Map<Integer, Session> activeSessionMap;
     private Map<Integer,Session> waitingSessionMap;
 
     // {  playerID: Session Object1 ,    }
@@ -40,12 +48,11 @@ public class SessionService {
     public boolean connectToSession(Integer playerID, Integer sessionID){
         Session session = waitingSessionMap.get(sessionID);
         return session.addPlayerQueue(playerID);
-
     }
 
     public boolean updateSessionAsActive(Integer playerID, Integer sessionID) {
         Session currentSession = waitingSessionMap.get(sessionID);
-        if(currentSession.getPlayerIDQueue().peek().equals(playerID)){
+        if(currentSession.getPlayerQueue().peek().equals(playerID)){
             System.out.println(waitingSessionMap.remove(sessionID));
             activeSessionMap.put(sessionID, currentSession);
             return true;
@@ -55,5 +62,37 @@ public class SessionService {
     public void deleteSession(Integer sessionID) {
         waitingSessionMap.remove(sessionID);
         activeSessionMap.remove(sessionID);
+    }
+
+    public boolean updateSession(Integer sessionID, Session updatedSession) {
+        if(activeSessionMap.put(sessionID, updatedSession)!=null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Session getActiveSession(Integer sessionID) {
+        return activeSessionMap.get(sessionID);
+    }
+
+    public ByteArrayResource getWaitingSession(Integer sessionID) {
+        if(waitingSessionMap.get(sessionID)==null) {
+            System.out.println(sessionID);
+            return null;
+        }
+        try( ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+            ObjectOutputStream out = null;
+            out = new ObjectOutputStream(bos);
+            out.writeObject(waitingSessionMap.get(sessionID));
+            out.flush();
+            byte[] array = bos.toByteArray();
+            ByteArrayResource resource = new ByteArrayResource(array);
+            System.out.println("HEYO");
+            return resource;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
