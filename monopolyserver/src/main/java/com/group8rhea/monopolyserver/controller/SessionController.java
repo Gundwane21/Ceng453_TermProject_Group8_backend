@@ -25,9 +25,9 @@ public class SessionController {
         this.sessionService = sessionService;
     }
 
-    @PostMapping(value = "/{playerID}")
-    public HttpResponseDto createSession(@PathVariable String playerID) {
-        sessionService.createSession(Integer.valueOf(playerID));
+    @PostMapping(value = "/{username}")
+    public HttpResponseDto createSession(@PathVariable String username) {
+        sessionService.createSession(username);
         return new HttpResponseDto(HttpStatus.CREATED, "", "Session created");
 
     }
@@ -48,9 +48,9 @@ public class SessionController {
         return sb.toString();
     }
 
-    @PutMapping(value = "/{sessionID}/{playerID}")
-    public HttpResponseDto connectSession(@PathVariable("sessionID") String sessionID, @PathVariable String playerID) {
-        boolean canAdd = sessionService.connectToSession(Integer.valueOf(playerID), Integer.valueOf(sessionID));
+    @PutMapping(value = "/{sessionID}/{username}")
+    public HttpResponseDto connectSession(@PathVariable("sessionID") String sessionID, @PathVariable String username) {
+        boolean canAdd = sessionService.connectToSession(username, Integer.valueOf(sessionID));
         if (canAdd) {
             return new HttpResponseDto(HttpStatus.OK, "", "New player is added to the waiting session");
         }
@@ -59,9 +59,9 @@ public class SessionController {
         );
     }
 
-    @GetMapping(value = "/{sessionID}/{playerID}/startGame")
-    public HttpResponseDto startGame(@PathVariable("sessionID") Integer sessionID, @PathVariable("playerID") Integer playerID) {
-        if (sessionService.updateSessionAsActive(playerID, sessionID)) {
+    @GetMapping(value = "/{sessionID}/{username}/startGame")
+    public HttpResponseDto startGame(@PathVariable("sessionID") Integer sessionID, @PathVariable("playerID") String username) {
+        if (sessionService.updateSessionAsActive(username, sessionID)) {
             return new HttpResponseDto(HttpStatus.OK, "", "Game started");
         }
         throw new ResponseStatusException(

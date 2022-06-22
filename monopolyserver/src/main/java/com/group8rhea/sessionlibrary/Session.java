@@ -21,9 +21,9 @@ public class Session implements Serializable {
     }
 
     // TODO: Implement a way to generate Player given playerID
-    public boolean addPlayerQueue(Integer playerID){
+    public boolean addPlayerQueue(String username){
         if (capacity > playerQueue.size()  ){
-            playerQueue.add(new PlayerDto(playerID));
+            playerQueue.add(new PlayerDto(username));
             return  true;
         }
         return false;

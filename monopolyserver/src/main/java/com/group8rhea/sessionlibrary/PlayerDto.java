@@ -12,13 +12,9 @@ import java.io.Serializable;
 public class PlayerDto implements Serializable {
     private static final long serialVersionUID = 2737714290822048885L;
 
-    public PlayerDto(Integer ID){
-        this.ID = ID;
+    public PlayerDto(String username){
+        this.username = username;
     }
-
-    @Getter
-    @Setter
-    private int ID;
 
     @Getter
     @Setter

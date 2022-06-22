@@ -23,20 +23,19 @@ public class SessionService {
     private Map<Integer,Session> waitingSessionMap;
 
     // {  playerID: Session Object1 ,    }
-    private Map<Integer,Integer> playerIDSessionIDMap ;
+    private Map<String,Integer> playerUsernameSessionIDMap ;
 
     SessionService(){
         this.sessionIDCounter = 0;
         this.activeSessionMap = new HashMap<>();
         this.waitingSessionMap = new HashMap<>();
-        this.playerIDSessionIDMap = new HashMap<>();
+        this.playerUsernameSessionIDMap = new HashMap<>();
     }
 
-    public Integer createSession(Integer playerID){
+    public Integer createSession(String username){
         Session session = new Session(sessionIDCounter++, SESSION_SIZE);
-        //TODO: Add player into sessions playerQueue
-        session.addPlayerQueue(playerID);
-        playerIDSessionIDMap.put(playerID, session.getSessionID());
+        session.addPlayerQueue(username);
+        playerUsernameSessionIDMap.put(username, session.getSessionID());
         waitingSessionMap.put(session.getSessionID(),session);
         return session.getSessionID();
     }
@@ -45,14 +44,14 @@ public class SessionService {
         return waitingSessionMap.keySet();
     }
 
-    public boolean connectToSession(Integer playerID, Integer sessionID){
+    public boolean connectToSession(String username, Integer sessionID){
         Session session = waitingSessionMap.get(sessionID);
-        return session.addPlayerQueue(playerID);
+        return session.addPlayerQueue(username);
     }
 
-    public boolean updateSessionAsActive(Integer playerID, Integer sessionID) {
+    public boolean updateSessionAsActive(String username, Integer sessionID) {
         Session currentSession = waitingSessionMap.get(sessionID);
-        if(currentSession.getPlayerQueue().peek().equals(playerID)){
+        if(currentSession.getPlayerQueue().peek().getUsername().equals(username)){
             System.out.println(waitingSessionMap.remove(sessionID));
             activeSessionMap.put(sessionID, currentSession);
             return true;
