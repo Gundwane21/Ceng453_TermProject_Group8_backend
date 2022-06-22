@@ -34,8 +34,7 @@ public class SessionService {
 
     public Integer createSession(String username){
         Session session = new Session(sessionIDCounter++, SESSION_SIZE);
-        session.addPlayerQueue(username);
-        playerUsernameSessionIDMap.put(username, session.getSessionID());
+//        session.addPlayerQueue(username);
         waitingSessionMap.put(session.getSessionID(),session);
         return session.getSessionID();
     }
@@ -87,7 +86,6 @@ public class SessionService {
             out.flush();
             byte[] array = bos.toByteArray();
             ByteArrayResource resource = new ByteArrayResource(array);
-            System.out.println("HEYO");
             return resource;
         } catch (IOException e) {
             e.printStackTrace();

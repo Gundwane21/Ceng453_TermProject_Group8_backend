@@ -35,4 +35,12 @@ public class PlayerDto implements Serializable {
     public String getUsername() {
         return username;
     }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
 }

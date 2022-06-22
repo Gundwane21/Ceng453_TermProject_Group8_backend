@@ -60,7 +60,7 @@ public class SessionController {
     }
 
     @GetMapping(value = "/{sessionID}/{username}/startGame")
-    public HttpResponseDto startGame(@PathVariable("sessionID") Integer sessionID, @PathVariable("playerID") String username) {
+    public HttpResponseDto startGame(@PathVariable("sessionID") Integer sessionID, @PathVariable("username") String username) {
         if (sessionService.updateSessionAsActive(username, sessionID)) {
             return new HttpResponseDto(HttpStatus.OK, "", "Game started");
         }
@@ -128,7 +128,6 @@ public class SessionController {
             out.flush();
             byte[] array = bos.toByteArray();
             ByteArrayResource resource = new ByteArrayResource(array);
-            System.out.println("HEYO");
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .contentLength(resource.contentLength())
