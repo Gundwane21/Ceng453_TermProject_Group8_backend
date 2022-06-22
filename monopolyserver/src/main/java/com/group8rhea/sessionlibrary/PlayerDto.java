@@ -32,5 +32,7 @@ public class PlayerDto implements Serializable {
     @Setter
     private int onThisTileId;
 
-
+    public String getUsername() {
+        return username;
+    }
 }
