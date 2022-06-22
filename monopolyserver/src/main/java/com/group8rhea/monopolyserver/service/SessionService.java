@@ -21,13 +21,14 @@ public class SessionService {
         this.sessionIDCounter = 0;
         this.activeSessionMap = new HashMap<>();
         this.waitingSessionMap = new HashMap<>();
+        this.playerIDSessionIDMap = new HashMap<>();
     }
 
     public Integer createSession(Integer playerID){
-        Session session = new Session(sessionIDCounter++,SESSION_SIZE);
+        Session session = new Session(sessionIDCounter++, SESSION_SIZE);
         //TODO: Add player into sessions playerQueue
         session.addPlayerQueue(playerID);
-        playerIDSessionIDMap.put(playerID,session.getSessionID());
+        playerIDSessionIDMap.put(playerID, session.getSessionID());
         waitingSessionMap.put(session.getSessionID(),session);
         return session.getSessionID();
     }
@@ -42,4 +43,17 @@ public class SessionService {
 
     }
 
+    public boolean updateSessionAsActive(Integer playerID, Integer sessionID) {
+        Session currentSession = waitingSessionMap.get(sessionID);
+        if(currentSession.getPlayerIDQueue().peek().equals(playerID)){
+            System.out.println(waitingSessionMap.remove(sessionID));
+            activeSessionMap.put(sessionID, currentSession);
+            return true;
+        }
+        return false;
+    }
+    public void deleteSession(Integer sessionID) {
+        waitingSessionMap.remove(sessionID);
+        activeSessionMap.remove(sessionID);
+    }
 }
