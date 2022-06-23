@@ -25,11 +25,9 @@ public class SessionController {
         this.sessionService = sessionService;
     }
 
-    @PostMapping(value = "/{username}")
-    public HttpResponseDto createSession(@PathVariable String username) {
-        sessionService.createSession(username);
-        return new HttpResponseDto(HttpStatus.CREATED, "", "Session created");
-
+    @PostMapping(value = "")
+    public Integer createSession() {
+        return sessionService.createSession();
     }
 
     @GetMapping(value = "")

@@ -32,9 +32,8 @@ public class SessionService {
         this.playerUsernameSessionIDMap = new HashMap<>();
     }
 
-    public Integer createSession(String username){
+    public Integer createSession(){
         Session session = new Session(sessionIDCounter++, SESSION_SIZE);
-//        session.addPlayerQueue(username);
         waitingSessionMap.put(session.getSessionID(),session);
         return session.getSessionID();
     }
