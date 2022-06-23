@@ -36,6 +36,10 @@ public class PlayerDto implements Serializable {
         return username;
     }
 
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
     public void setX(double x) {
         this.x = x;
     }

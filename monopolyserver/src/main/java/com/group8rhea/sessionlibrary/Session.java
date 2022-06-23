@@ -28,6 +28,7 @@ public class Session implements Serializable {
             PlayerDto newPlayer = new PlayerDto(username);
             newPlayer.setX(0);
             newPlayer.setY(0);
+            newPlayer.setMoney(1500);
             playerQueue.add(newPlayer);
             playerMap.put(newPlayer, 0);
             return  true;
