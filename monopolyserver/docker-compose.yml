@@ -1,0 +1,17 @@
+version: "3"
+services: 
+  my_mariadb:
+    image: mariadb:10
+    container_name: my_mariadb
+    environment:
+      - MARIADB_ROOT_PASSWORD=teamrhea 
+      - MARIADB_DATABASE=project_group8
+
+  monopoly-server:
+#    build: .
+#    command: 
+    image: gundwane21/gs-spring-boot-docker
+    depends_on:
+      - my_mariadb
+    ports:
+      - 8080:8080
