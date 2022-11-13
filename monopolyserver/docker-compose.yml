@@ -10,7 +10,7 @@ services:
   monopoly-server:
 #    build: .
 #    command: 
-    image: gundwane21/gs-spring-boot-docker
+    image: gundwane21/monopoly-server
     depends_on:
       - my_mariadb
     ports:
