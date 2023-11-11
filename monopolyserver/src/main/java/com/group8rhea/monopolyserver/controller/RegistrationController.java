@@ -37,6 +37,8 @@ public class RegistrationController {
     @ApiResponse(responseCode = "201", description = "Returns the succesfull add response", content = @Content(mediaType = "application/json"))
     @ApiResponse(responseCode = "409", description = "Returns the user already exists response", content = @Content(mediaType = "application/json"))
     public HttpResponseDto register(@RequestBody SignUpDto userDto){
+        System.out.println('test-pr')
+    
         return registerLoginServices.registerUser(userDto);
     }
     @Operation(description = "Logins the user with Http Basic Authentification", security = {@SecurityRequirement(name="Basic-Authentification")})

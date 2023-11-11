@@ -43,10 +43,13 @@ public class GameRecordScoreEntity {
     }
 
     public int getUserId() {
+        System.out.println('test-pr')
         return userId;
     }
 
     public void setUserId(int userId) {
+        System.out.println('test-pr')
+
         this.userId = userId;
     }
 

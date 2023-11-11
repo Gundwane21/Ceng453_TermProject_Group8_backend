@@ -44,4 +44,21 @@ public class LeaderboardServiceTest {
         List<Map<String, Long>> leaderboardAllTimes = leaderboardService.getLeaderboard(TimeInterval.ALL_TIMES);
         Assert.assertEquals(result, leaderboardAllTimes);
     }
+     @Test
+    @DisplayName("Test retrieving leaderboard for All Times2")
+    public void getLeaderboardAllTimesTest2() {
+        List<Map<String, Long>> result = new ArrayList<>();
+        Map<String, Long> map = new HashMap<String, Long>();
+        map.put("KeremTheMonopolyKing", (long) 100);
+        Map<String, Long> map2 = new HashMap<String, Long>();
+        map2.put("GorkemOfRivia", (long) 180);
+        Map<String, Long> map3 = new HashMap<String, Long>();
+        map2.put("John", (long) 360);
+        result.add(map);
+        result.add(map2);
+        result.add(map3);
+        when(gameRecordStoreRepository.getLeaderboardAllTimes()).thenReturn(result);
+        List<Map<String, Long>> leaderboardAllTimes = leaderboardService.getLeaderboard(TimeInterval.ALL_TIMES);
+        Assert.assertEquals(result, leaderboardAllTimes);
+    }
 }
